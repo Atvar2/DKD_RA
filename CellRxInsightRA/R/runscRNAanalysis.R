@@ -312,7 +312,7 @@ for (i in celltype) {
   subdata=subset(data,idents=i)
   print(unique(subdata$Celltype))
   Idents(subdata)<-"Groups"
-  marker<-FindMarkers(subdata,ident.1="DKD",idents.2="Normal",only.pos=F, min.pct=0.1,logfc.threshold=0.25)
+  marker<-FindMarkers(subdata,ident.1="DKD",ident.2="Normal",only.pos=F, min.pct=0.1,logfc.threshold=0.25)
   marker<- marker %>% mutate(Difference = pct.1-pct.2)
   submarker = data.frame(gene=row.names(marker),Difference=marker$Difference, logFC=marker$avg_log2FC,p=marker$p_val,adj.P=marker$p_val_adj,Celltype=i,State=ifelse(marker$p_val_adj<0.05,ifelse(marker$avg_log2FC>0.25,"Up",ifelse(marker$avg_log2FC< -0.25,"Down","No")),"No"))
 
