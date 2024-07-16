@@ -114,46 +114,6 @@ data <- FindClusters(data, resolution = 0.5)
 saveRDS(file="dataintegratedPCA45.rds",data)
 
 # 2.2 Celltype annotation
-# PT
-gene<-c("Slc13a3", "Slc34a1","Gpx3","Dcxr","Haf4a","Slc22a12","Slc27a2","Lrp2","Atp11a")  # 小鼠
-gene<-c("Keg1","G6pc", "Alpl","Slc13a1","Scin")
-gene<-c("Slc22a7", "Fxyd2", "Hrsp12", "Slc17a3")  #PST
-#DCT
-gene<-c("Slc12a3","Pvalb","Emx1","Cwh43")
-# CD-IC 集合管间介细胞
-gene<-c("Atp6v0d2","Atp6v1g3", "Slc4a1","Aqp6", "Slc26a4","Hmx2","Tmem61")
-# Endo
-gene<-c("Nrp1","Kdr","Ehd3","Plat","Flt1","Eng","Ptprb")
-# Pericytes and vascular smooth muscle  Peri 血管内皮
-gene<-c("Vim","S100a4")
-# DLH
-gene<-c("Aqp1","Bst1","Proser2")
-# Podo 足细胞
-gene<-c("Nphs1","Nphs2","Cdkn1c","Bcam","Wt1","Itga3","Lamb2")
-# ALH 亨勒升环
-gene<-c("Slc12a1","Umod","Cldn8","Cldn10","Krt18","Krt8")
-# CD-PC 集合管主体 / 上皮细胞
-gene<-c("Aqp2","Hsd11b2","Tmem45b")
-# CD-Trans 集合管移行细胞
-gene<-c("Rhbg","Insrr","Parm1","Sec23b")
-# Novel 新型细胞
-gene<-c("Cdca3","Mki67","Slc27a2","Lrp2","Stmn1")
-# Fib   成纤维细胞
-gene<-c("S100a4","Plac8","Mmp2","Emilin1","Sfrp2")
-gene<-c("S100a4","Plac8","Mmp2","Emilin1","Sfrp2","Hsp47","Col1a1", "Col1a2", "Col5a1", "Loxl1", "Lum", "Fbln1","Fbln2")   # fibroblast
-#MyoFib 髓系成纤维细胞
-gene<-c("Acta2","Pdgfrb")
-#B      B淋巴细胞
-gene<-c("Cd79a","Cd79b","Ly6d")
-# T/NK
-gene<-c("Cxcr6","Ltb","Il7r","Cd3d","Cd3e", "Gzma","Nkg7","Gnly")
-# Macro 巨噬细胞
-gene<-c("C1qa","C1qb","Ncf2","Lyz2","Alox5ap")
-# Mono 单核细胞
-gene<-c("Lyz","Cd14")
-# Neutro        中性粒细胞
-gene<-c("S100a8","S100a9")
-
 data@meta.data <- data@meta.data %>% mutate(Type=case_when(orig.ident == "CTL1" ~ "Normal1",
                                                            orig.ident == "CTL2" ~ "Normal2",
                                                            orig.ident == "DK1" ~ "DKD1",
@@ -312,7 +272,7 @@ for (i in celltype) {
   subdata=subset(data,idents=i)
   print(unique(subdata$Celltype))
   Idents(subdata)<-"Groups"
-  marker<-FindMarkers(subdata,ident.1="DKD",ident.2="Normal",only.pos=F, min.pct=0.1,logfc.threshold=0.25)
+  marker<-FindMarkers(subdata,ident.1="DKD",idents.2="Normal",only.pos=F, min.pct=0.1,logfc.threshold=0.25)
   marker<- marker %>% mutate(Difference = pct.1-pct.2)
   submarker = data.frame(gene=row.names(marker),Difference=marker$Difference, logFC=marker$avg_log2FC,p=marker$p_val,adj.P=marker$p_val_adj,Celltype=i,State=ifelse(marker$p_val_adj<0.05,ifelse(marker$avg_log2FC>0.25,"Up",ifelse(marker$avg_log2FC< -0.25,"Down","No")),"No"))
 
