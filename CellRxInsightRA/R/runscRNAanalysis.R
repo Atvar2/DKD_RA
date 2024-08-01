@@ -155,9 +155,9 @@ colourCount = length(unique(Cellratio$Var1))
 
 # Correlation analysis between public scRNA and bulk RNAseq and data in the research
 pdata<-readRDS("./publick_Data/Seurat_object_mouseDB70.RDS") #// 已发表代谢
-raw.data <- read.table("/szrmyy/Drwang/scRNA/chenjunhui/P00010_Drzhang/00.data/publick_Data/GSE107585_count.txt",sep="\t", header=T, row.names = 1)
+raw.data <- read.table("./publick_Data/GSE107585_count.txt",sep="\t", header=T, row.names = 1)
 main_tiss <- CreateSeuratObject(counts = raw.data)
-metadata<-read.table("/szrmyy/Drwang/scRNA/chenjunhui/P00010_Drzhang/00.data/publick_Data/GSE107585_metadata.txt",sep="\t",header=T,row.names = 1)
+metadata<-read.table("./00.data/publick_Data/GSE107585_metadata.txt",sep="\t",header=T,row.names = 1)
 metadata<-data.frame((t(metadata)))
 main_tiss <- AddMetaData(object = main_tiss, metadata = metadata)
 saveRDS(file="ScienceNomaleMouse.RDS", main_tiss)
